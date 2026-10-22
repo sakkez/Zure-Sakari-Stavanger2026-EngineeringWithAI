@@ -1,0 +1,28 @@
+# The runs in a talk, side by side in one scoreboard table, in this order.
+# Copy and edit per talk: scripts/new-talk.sh <talk> [runs.yaml]
+#   run:    <pack>-<effort>, becomes the folder under runs/ and the scoreboard column
+#   skills: folder under template/skills/ (raw | mattpocock | firstmate | ecc)
+#   effort: thinking effort (low | medium | high)
+#   port:   fixed, so the scoreboard and QR codes stay the same
+# raw-low against raw-med varies effort; the -med runs against raw-med vary the skill pack.
+runs:
+  - run: raw-low
+    skills: raw
+    effort: low
+    port: 3001
+  - run: raw-med
+    skills: raw
+    effort: medium
+    port: 3002
+  - run: ecc-med
+    skills: ecc
+    effort: medium
+    port: 3003
+  - run: firstmate-med
+    skills: firstmate
+    effort: medium
+    port: 3004
+  - run: matt-med
+    skills: mattpocock
+    effort: medium
+    port: 3005

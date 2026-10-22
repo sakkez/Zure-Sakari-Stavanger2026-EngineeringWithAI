@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>How do I feel?</title>
+  <style>
+    :root { --bg: #f6f6f4; --fg: #1d1d1b; --muted: #6b6b66; --card: #fff; --accent: #5b4fe9; --border: #e2e2dd; }
+    @media (prefers-color-scheme: dark) {
+      :root { --bg: #161615; --fg: #ededea; --muted: #9a9a94; --card: #20201e; --accent: #8f86ff; --border: #33332f; }
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; background: var(--bg); color: var(--fg); font: 16px/1.5 system-ui, sans-serif; }
+    main { max-width: 640px; margin: 0 auto; padding: 48px 16px; }
+    h1 { margin: 0 0 4px; font-size: 28px; }
+    p.sub { margin: 0 0 24px; color: var(--muted); }
+    form { display: flex; gap: 8px; }
+    input { flex: 1; min-width: 0; padding: 12px 14px; font: inherit; color: inherit; background: var(--card);
+            border: 1px solid var(--border); border-radius: 10px; }
+    input:focus { outline: 2px solid var(--accent); outline-offset: -1px; }
+    button { padding: 12px 18px; font: inherit; font-weight: 600; color: #fff; background: var(--accent);
+             border: 0; border-radius: 10px; cursor: pointer; }
+    button:disabled { opacity: .6; cursor: wait; }
+    #result { margin-top: 28px; }
+    .card { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 16px; }
+    .card img { display: block; width: 100%; border-radius: 8px; }
+    .card h2 { margin: 12px 0 2px; font-size: 18px; }
+    .meta { color: var(--muted); font-size: 14px; }
+    .alts { display: flex; gap: 8px; margin-top: 14px; flex-wrap: wrap; }
+    .alts button { display: flex; flex-direction: column; align-items: center; width: 90px; padding: 6px;
+                   background: transparent; color: var(--fg); border: 1px solid var(--border); font-weight: 400;
+                   font-size: 12px; cursor: pointer; }
+    .alts img { width: 76px; height: 60px; object-fit: cover; border-radius: 4px; }
+    .error { color: #d33; }
+  </style>
+</head>
+<body>
+<main>
+  <h1>How do I feel?</h1>
+  <p class="sub">Tell me how you feel. Jev picks the meme.</p>
+  <form id="form">
+    <input id="text" placeholder="e.g. my code works and I don't know why" autocomplete="off" autofocus>
+    <button id="go">Meme it</button>
+  </form>
+  <div id="result"></div>
+</main>
+<script>
+  const form = document.getElementById("form");
+  const input = document.getElementById("text");
+  const btn = document.getElementById("go");
+  const out = document.getElementById("result");
+  const esc = s => s.replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+  // When opened straight from disk (file://), talk to the local server
+  const API = location.protocol === "file:" ? "http://localhost:3000" : "";
+  const src = file => API + "/memes/" + encodeURIComponent(file);
+
+  function render(data, shown) {
+    const main = data.alternatives.find(a => a.name === shown) || data.alternatives[0];
+    out.innerHTML = `
+      <div class="card">
+        <img src="${src(main.file)}" alt="${esc(main.name)}">
+        <h2>${esc(main.name)}</h2>
+        <div class="meta">${Math.round(main.probability * 100)}% probability · confidence ${data.confidence.toFixed(2)}</div>
+        <div class="alts">${data.alternatives.filter(a => a.name !== main.name).map(a => `
+          <button data-name="${esc(a.name)}" title="${esc(a.name)}">
+            <img src="${src(a.file)}" alt="">${Math.round(a.probability * 100)}%
+          </button>`).join("")}
+        </div>
+      </div>`;
+    out.querySelectorAll(".alts button").forEach(b => b.onclick = () => render(data, b.dataset.name));
+  }
+
+  form.onsubmit = async e => {
+    e.preventDefault();
+    const text = input.value.trim();
+    if (!text) return;
+    btn.disabled = true; btn.textContent = "Thinking…";
+    try {
+      const res = await fetch(API + "/api/meme", {
+        method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ text }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || res.statusText);
+      render(data, data.name);
+    } catch (err) {
+      const msg = err instanceof TypeError
+        ? "Can't reach the server. Start it with `npm start` and open http://localhost:3000"
+        : err.message;
+      out.innerHTML = `<p class="error">${esc(msg)}</p>`;
+    } finally {
+      btn.disabled = false; btn.textContent = "Meme it";
+    }
+  };
+</script>
+</body>
+</html>

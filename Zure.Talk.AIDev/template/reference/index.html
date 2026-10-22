@@ -1,0 +1,144 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Battle royale</title>
+<style>
+  body { margin: 0; font: 15px system-ui, sans-serif; background: #111; color: #eee; padding: 8px; }
+  #layout { display: flex; gap: 16px; justify-content: center; align-items: flex-start; }
+  #main { display: grid; justify-items: center; gap: 8px; }
+  #side { width: 220px; }
+  @media (max-width: 800px) { #layout { flex-direction: column; align-items: center; } #side { width: auto; } }
+  #hud { display: flex; gap: 12px; flex-wrap: wrap; }
+  #board { position: relative; width: min(92vw, 540px); aspect-ratio: 1; background: #3a1d1d; }
+  #zone { position: absolute; background: #1f3a24; transition: all 0.6s ease-in-out; }
+  .p { position: absolute; width: calc(100% / 30); height: calc(100% / 30); border-radius: 2px; background: #6af; transition: left 0.15s, top 0.15s; }
+  .p.me { background: #fd4; } .p.bot { background: #f55; }
+  .hb { position: absolute; left: 0; right: 0; bottom: calc(100% + 2px); height: 3px; background: #400; }
+  .hb > div { height: 100%; background: #4e4; transition: width 0.4s; }
+  .dmg { position: absolute; font-weight: bold; pointer-events: none; transform: translateX(-50%); animation: rise 0.9s ease-out forwards; }
+  .dmg.dealt { color: #ffd400; } .dmg.taken { color: #ff3b30; }
+  @keyframes rise { from { opacity: 1; transform: translate(-50%, 0); } to { opacity: 0; transform: translate(-50%, -28px); } }
+  #cooldown { width: min(92vw, 540px); height: 8px; background: #333; }
+  #cooldown > div { height: 100%; background: #6af; transition: width 0.05s linear; }
+  #cooldown[data-ready="true"] > div { background: #4e4; }
+  #pad { display: grid; grid-template-columns: repeat(3, 56px); gap: 6px; }
+  #pad button { height: 48px; font-size: 18px; }
+  ol, ul { margin: 0; padding-left: 20px; }
+</style>
+</head>
+<body>
+<div id="layout">
+  <div id="main">
+    <div id="hud">
+      <span>You: <b data-testid="me"></b></span>
+      <span>HP <b data-testid="hp"></b> / <b data-testid="hp-max"></b></span>
+      <span>Score <b data-testid="score"></b></span>
+      <span>Phase <b data-testid="phase"></b> <span id="count"></span></span>
+      <span id="result" hidden>Winner: <b data-testid="winner"></b></span>
+    </div>
+    <div id="board" data-testid="grid"><div id="zone" data-testid="zone"></div></div>
+    <div id="cooldown" data-testid="cooldown" data-ready="true" data-progress="1"><div></div></div>
+    <div id="pad">
+      <span></span><button data-testid="up">▲</button><span></span>
+      <button data-testid="left">◀</button><button data-testid="attack">⚔</button><button data-testid="right">▶</button>
+      <span></span><button data-testid="down">▼</button><span></span>
+    </div>
+  </div>
+  <div id="side">
+    <div>Highscores<ol id="highscores" data-testid="highscores"></ol></div>
+    <p><button data-testid="rules-button">Rules</button></p>
+    <ul data-testid="rules" hidden>
+      <li>Move one cell up, down, left or right, at most 5 moves a second.</li>
+      <li>Attack hits everyone in the 8 cells around you for 25.</li>
+      <li>After you attack or move, wait 1 second before attacking again. Presses during the wait are dropped.</li>
+      <li>You start with 100 hit points. At 0 you are out.</li>
+      <li>Outside the safe zone you lose 10 hit points a second.</li>
+      <li>Points: 100 a kill, 10 for each zone shrink you live through, 250 for winning.</li>
+    </ul>
+  </div>
+</div>
+<script>
+  const $ = (id) => document.querySelector(`[data-testid="${id}"]`);
+  const board = $("grid"), zoneEl = $("zone"), cool = $("cooldown");
+  let token = null;
+  try { token = localStorage.getItem("token"); } catch {}
+  const send = (msg) => token && fetch("/intent", { method: "POST", body: JSON.stringify({ ...msg, token }) });
+  const es = new EventSource("/events" + (token ? "?token=" + token : ""));
+  es.addEventListener("hello", (e) => {
+    const h = JSON.parse(e.data);
+    token = h.token;
+    try { localStorage.setItem("token", token); } catch {}
+    es.close();
+    listen();
+  });
+  function listen() {
+    const s = new EventSource("/events?token=" + token);
+    s.onmessage = (e) => render(JSON.parse(e.data));
+  }
+  const pct = (n) => (n * 100) / 30 + "%";
+  const seen = new Map(); // name -> last known place
+  const blocks = new Map(); // name -> block element
+  function render(st) {
+    $("me").textContent = st.you.name;
+    $("hp").textContent = st.you.hp;
+    $("hp-max").textContent = st.you.max;
+    $("score").textContent = st.you.score;
+    $("phase").textContent = st.phase;
+    document.getElementById("count").textContent = st.countdown != null ? Math.ceil(st.countdown / 1000) + "s" : "";
+    document.getElementById("result").hidden = st.phase !== "over";
+    $("winner").textContent = st.winner ?? "";
+    const progress = 1 - st.you.cooldown / 1000;
+    cool.dataset.ready = String(st.you.cooldown === 0);
+    cool.dataset.progress = progress.toFixed(2);
+    cool.firstElementChild.style.width = progress * 100 + "%";
+    const z = st.zone;
+    Object.assign(zoneEl.dataset, { x0: z.x0, y0: z.y0, x1: z.x1, y1: z.y1 });
+    Object.assign(zoneEl.style, { left: pct(z.x0), top: pct(z.y0), width: pct(z.x1 - z.x0 + 1), height: pct(z.y1 - z.y0 + 1) });
+    // Blocks are kept between updates, so their moves and health bars animate.
+    const names = new Set(st.players.map((p) => p.name));
+    for (const [name, n] of blocks) if (!names.has(name)) { n.remove(); blocks.delete(name); }
+    for (const p of st.players) {
+      let n = blocks.get(p.name);
+      if (!n) {
+        n = document.createElement("div");
+        n.dataset.testid = "player";
+        n.innerHTML = `<div class="hb" data-testid="healthbar"><div data-testid="healthbar-fill"></div></div>`;
+        blocks.set(p.name, n);
+        board.append(n);
+      }
+      n.className = "p" + (p.bot ? " bot" : "") + (p.name === st.you.name ? " me" : "");
+      Object.assign(n.dataset, { name: p.name, x: p.x, y: p.y, hp: p.hp });
+      if (p.bot) n.dataset.bot = "true";
+      n.title = p.name;
+      Object.assign(n.style, { left: pct(p.x), top: pct(p.y) });
+      n.querySelector('[data-testid="healthbar-fill"]').style.width = (p.hp * 100) / p.max + "%";
+    }
+    for (const h of st.hits) {
+      const target = st.players.find((p) => p.name === h.to) ?? seen.get(h.to); // a killing hit: where they stood
+      if (!target) continue;
+      const d = document.createElement("div");
+      d.className = "dmg " + (h.to === st.you.name ? "taken" : "dealt");
+      d.dataset.testid = "damage";
+      Object.assign(d.dataset, { target: h.to, amount: h.amount, kind: h.to === st.you.name ? "taken" : "dealt" });
+      d.textContent = "-" + h.amount;
+      Object.assign(d.style, { left: pct(target.x + 0.5), top: `calc(${pct(target.y)} - 18px)` });
+      board.append(d);
+      setTimeout(() => d.remove(), 1000);
+    }
+    for (const p of st.players) seen.set(p.name, p);
+    document.getElementById("highscores").innerHTML = st.highscores
+      .map((h) => `<li data-testid="highscore" data-name="${h.name}" data-score="${h.score}">${h.name}: ${h.score}</li>`).join("");
+  }
+  const KEYS = { ArrowUp: "up", ArrowDown: "down", ArrowLeft: "left", ArrowRight: "right", w: "up", s: "down", a: "left", d: "right" };
+  addEventListener("keydown", (e) => {
+    if (KEYS[e.key]) { e.preventDefault(); send({ type: "move", dir: KEYS[e.key] }); }
+    else if (e.key === " ") { e.preventDefault(); send({ type: "attack" }); }
+  });
+  for (const dir of ["up", "down", "left", "right"]) $(dir).addEventListener("click", () => send({ type: "move", dir }));
+  $("attack").addEventListener("click", () => send({ type: "attack" }));
+  $("rules-button").addEventListener("click", () => { $("rules").hidden = !$("rules").hidden; });
+</script>
+</body>
+</html>

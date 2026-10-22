@@ -1,0 +1,9 @@
+{
+  "name": "battle-royale-reference",
+  "private": true,
+  "description": "Reference build of brief.md. Proves the acceptance suite passes against a correct game; never shown to a run.",
+  "type": "module",
+  "scripts": {
+    "start": "node server.mjs"
+  }
+}
