@@ -1,0 +1,45 @@
+{
+  "acceptance": {
+    "passed": 19,
+    "total": 21
+  },
+  "quality": {
+    "run": "runs/matt-med",
+    "files": 10,
+    "testFiles": 2,
+    "typeErrors": 0,
+    "lint": {
+      "errors": 19,
+      "warnings": 6
+    },
+    "complexity": {
+      "functions": 64,
+      "nloc": 415,
+      "avgCcn": 2.3,
+      "maxCcn": 33,
+      "over10": 2
+    },
+    "duplicationPct": 0,
+    "ownTests": {
+      "total": 7,
+      "passed": 7,
+      "coveragePct": 79.62
+    },
+    "ownE2e": {
+      "total": 0,
+      "passed": 0
+    },
+    "testsSkipped": 0,
+    "testFilesDeleted": 0,
+    "mutationScore": null,
+    "semgrepFindings": 0,
+    "auditHighCritical": 0,
+    "dependencies": 4
+  },
+  "cost": {
+    "usd": 1.74,
+    "tokens": 2199883,
+    "outputTokens": 36574
+  },
+  "minutes": 31
+}

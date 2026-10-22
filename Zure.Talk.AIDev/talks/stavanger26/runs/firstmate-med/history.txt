@@ -1,0 +1,50 @@
+
+d6c6302 2026-10-21 13:57:30 +0300 Ignore Playwright output
+
+ .gitignore                  | 2 ++
+ test-results/.last-run.json | 4 ----
+ 2 files changed, 2 insertions(+), 4 deletions(-)
+
+8e117f9 2026-10-21 13:57:21 +0300 Add reconnect e2e test and assumptions
+
+ ASSUMPTIONS.md              | 17 +++++++++++++++++
+ e2e/two-players.spec.ts     |  8 ++++++++
+ public/client.js            |  4 ++--
+ test-results/.last-run.json |  4 ++++
+ 4 files changed, 31 insertions(+), 2 deletions(-)
+
+5a69415 2026-10-21 13:56:20 +0300 Add battle royale server, client and unit tests
+
+ .started-at             |    1 +
+ e2e/two-players.spec.ts |   71 ++
+ idea.md                 |   17 +
+ package-lock.json       | 2078 +++++++++++++++++++++++++++++++++++++++++++++++
+ package.json            |   22 +
+ playwright.config.ts    |   14 +
+ public/client.js        |  133 +++
+ public/index.html       |   51 ++
+ public/style.css        |   43 +
+ src/game.ts             |  286 +++++++
+ src/server.ts           |  105 +++
+ tests/game.test.ts      |  103 +++
+ tsconfig.json           |    7 +
+ vitest.config.ts        |    2 +
+ 14 files changed, 2933 insertions(+)
+
+b3b3198 2026-10-21 12:29:14 +0300 install firstmate
+
+ .agent-collect | 6 ++++++
+ .agent-cwd     | 1 +
+ .agent-steps   | 1 +
+ 3 files changed, 8 insertions(+)
+
+4a1b94c 2026-10-21 12:28:57 +0300 base harness
+
+ .claude/settings.json | 20 ++++++++++++++++
+ .gitignore            |  8 +++++++
+ .run.env              |  4 ++++
+ AGENTS.md             | 64 +++++++++++++++++++++++++++++++++++++++++++++++++++
+ CLAUDE.md             |  1 +
+ PROMPT.md             |  7 ++++++
+ checks.sh             | 11 +++++++++
+ 7 files changed, 115 insertions(+)

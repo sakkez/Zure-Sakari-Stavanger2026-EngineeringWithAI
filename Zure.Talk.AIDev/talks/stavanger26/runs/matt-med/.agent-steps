@@ -1,0 +1,5 @@
+/grill-with-docs {{PROMPT}} I am not available: put each round of questions to the product-owner subagent and take its replies as my answers. Stop when the frontier is empty.
+---
+/to-spec Check the seams with the product-owner subagent instead of me.
+---
+/implement the spec you just wrote in .scratch/. Then finish the task: say DONE when `npm run test:e2e` passes.

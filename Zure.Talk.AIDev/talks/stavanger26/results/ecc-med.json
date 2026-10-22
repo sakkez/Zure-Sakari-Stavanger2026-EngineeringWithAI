@@ -1,0 +1,45 @@
+{
+  "acceptance": {
+    "passed": 21,
+    "total": 21
+  },
+  "quality": {
+    "run": "runs/ecc-med",
+    "files": 13,
+    "testFiles": 4,
+    "typeErrors": 0,
+    "lint": {
+      "errors": 0,
+      "warnings": 2
+    },
+    "complexity": {
+      "functions": 158,
+      "nloc": 814,
+      "avgCcn": 1.8,
+      "maxCcn": 14,
+      "over10": 3
+    },
+    "duplicationPct": 0.29,
+    "ownTests": {
+      "total": 30,
+      "passed": 30,
+      "coveragePct": 97.65
+    },
+    "ownE2e": {
+      "total": 2,
+      "passed": 2
+    },
+    "testsSkipped": 0,
+    "testFilesDeleted": 0,
+    "mutationScore": null,
+    "semgrepFindings": 0,
+    "auditHighCritical": 0,
+    "dependencies": 4
+  },
+  "cost": {
+    "usd": 5.4,
+    "tokens": 8869206,
+    "outputTokens": 85379
+  },
+  "minutes": 35
+}

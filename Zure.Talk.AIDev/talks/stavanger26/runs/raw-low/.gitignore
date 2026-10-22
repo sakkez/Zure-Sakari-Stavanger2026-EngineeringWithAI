@@ -1,0 +1,9 @@
+node_modules/
+dist/
+coverage/
+.claude-home/
+.firstmate/
+reports/
+.claude/agents/product-owner.md
+.steps/
+test-results/

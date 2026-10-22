@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+  <title>Zone Royale</title>
+  <link rel="stylesheet" href="/style.css" />
+</head>
+<body>
+  <header class="hud">
+    <div class="who"><span class="label">You</span> <strong data-testid="me">…</strong></div>
+    <div class="stat"><span class="label">HP</span> <span data-testid="hp">100</span>/<span data-testid="hp-max">100</span></div>
+    <div class="stat"><span class="label">Score</span> <span data-testid="score">0</span></div>
+    <div class="stat"><span class="label">Phase</span> <span data-testid="phase">lobby</span> <span id="timer"></span></div>
+    <div class="cd-wrap"><span class="label">Strike</span>
+      <div data-testid="cooldown" data-ready="true" data-progress="1" class="cooldown"><div class="cd-fill"></div></div>
+    </div>
+  </header>
+  <div id="banner" class="banner"></div>
+  <main class="layout">
+    <section class="arena-wrap">
+      <div data-testid="grid" id="grid" class="grid">
+        <div data-testid="zone" id="zone" class="zone" data-x0="0" data-y0="0" data-x1="29" data-y1="29"></div>
+        <div id="pieces"></div>
+      </div>
+      <div class="over-card" id="over-card" hidden>
+        <div class="over-title">Round over</div>
+        <div>Winner: <strong data-testid="winner" id="winner">none</strong></div>
+      </div>
+    </section>
+    <aside class="side">
+      <div class="panel">
+        <h2>Highscores</h2>
+        <ol data-testid="highscores" id="highscores"></ol>
+      </div>
+      <div class="panel">
+        <h2>Arena</h2>
+        <ul id="online" class="online"></ul>
+      </div>
+      <div class="panel">
+        <button data-testid="rules-button" id="rules-button" class="rules-btn">Rules</button>
+        <ul data-testid="rules" id="rules" class="rules" hidden>
+          <li>Move with the arrow keys or WASD, one cell per press (max 5 moves a second).</li>
+          <li>Press Space to strike: 25 damage to everyone in the 8 cells around you.</li>
+          <li>After a strike you wait 1 second before you can strike again.</li>
+          <li>Everyone starts with 100 HP. At 0 HP you are out, but you can keep watching.</li>
+          <li>The safe zone shrinks by one cell on every side every 15 seconds, down to 4 by 4.</li>
+          <li>Outside the zone you lose 10 HP every second.</li>
+          <li>Last one standing wins. If the last players fall together, nobody wins.</li>
+          <li>Points: 100 per kill, 10 for each zone shrink you survive, 250 for winning.</li>
+          <li>Alone in the arena? A bot joins your round. Joining mid-round? You play the next one.</li>
+          <li>Lost connection? You have 10 seconds to come back to keep your place.</li>
+        </ul>
+      </div>
+    </aside>
+  </main>
+  <nav class="pad">
+    <button data-testid="up" class="pad-btn up" aria-label="up">▲</button>
+    <button data-testid="left" class="pad-btn left" aria-label="left">◀</button>
+    <button data-testid="attack" class="pad-btn attack" aria-label="attack">⚔</button>
+    <button data-testid="right" class="pad-btn right" aria-label="right">▶</button>
+    <button data-testid="down" class="pad-btn down" aria-label="down">▼</button>
+  </nav>
+  <script src="/client.js"></script>
+</body>
+</html>

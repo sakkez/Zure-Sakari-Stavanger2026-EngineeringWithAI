@@ -1,0 +1,5 @@
+/plan {{PROMPT}} I am not available: put open questions to the product-owner subagent and have it approve the plan instead of me.
+---
+CONFIRM. Build it with the tdd-workflow skill, following the plan and AGENTS.md.
+---
+/code-review Fix what it finds. Then finish the task: say DONE when `npm run test:e2e` passes.

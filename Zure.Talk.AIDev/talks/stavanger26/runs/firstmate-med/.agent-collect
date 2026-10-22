@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+# Fast-forward the run to what firstmate landed in its clone of it.
+run="$(cd "$(dirname "$0")" && pwd)"
+clone="$run/.firstmate/projects/game"
+[[ -d "$clone/.git" ]] || { echo "firstmate: no clone at $clone, nothing landed" >&2; exit 0; }
+git -C "$run" pull --quiet --ff-only "$clone" HEAD

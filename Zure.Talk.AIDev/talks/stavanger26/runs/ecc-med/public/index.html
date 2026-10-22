@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<title>Grid Royale</title>
+<style>
+  :root {
+    --bg: #0b0620; --panel: #1a0f3d; --text: #f4f0ff; --muted: #a99bd8;
+    --accent: #ff2bd6; --accent2: #22f0ff; --zone: #22f0ff; --danger: #ff3b3b; --dealt: #ffe600;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; min-height: 100vh; font-family: system-ui, sans-serif; color: var(--text);
+    background: radial-gradient(circle at 20% 0%, #3b0f6e 0%, var(--bg) 60%); background-color: var(--bg);
+    display: flex; flex-direction: column; align-items: center; gap: 8px; padding: 8px 16px;
+    touch-action: manipulation; user-select: none;
+  }
+  header { width: 100%; max-width: 980px; display: flex; flex-wrap: wrap; gap: 8px 16px; align-items: center;
+    position: sticky; top: 0; z-index: 5; background: rgba(11, 6, 32, .85); padding: 6px 8px; border-radius: 10px; }
+  header h1 { margin: 0; font-size: 18px; background: linear-gradient(90deg, var(--accent), var(--accent2));
+    -webkit-background-clip: text; background-clip: text; color: transparent; }
+  .stat { font-size: 14px; color: var(--muted); }
+  .stat b { color: var(--text); font-variant-numeric: tabular-nums; }
+  #phase { text-transform: uppercase; letter-spacing: .1em; color: var(--accent2); font-weight: 700; }
+  .cooldown { width: 90px; height: 10px; border-radius: 5px; background: #2c1d5e; overflow: hidden; display: inline-block; vertical-align: middle; }
+  .cooldown-fill { height: 100%; width: 100%; background: linear-gradient(90deg, var(--accent), var(--accent2)); }
+  .cooldown[data-ready="true"] .cooldown-fill { box-shadow: 0 0 10px var(--accent2); }
+  main { display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; width: 100%; max-width: 980px; }
+  #board-wrap { position: relative; width: min(calc(100vw - 32px), 62vh, 620px); }
+  #grid { position: relative; width: 100%; aspect-ratio: 1; border-radius: 8px; overflow: hidden;
+    background-color: #170b38;
+    background-image: linear-gradient(rgba(255,255,255,.05) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.05) 1px, transparent 1px);
+    background-size: calc(100% / 30) calc(100% / 30); box-shadow: 0 0 30px rgba(255, 43, 214, .25); }
+  #grid.shake { animation: shake .25s; }
+  @keyframes shake { 25% { transform: translate(4px, -3px); } 50% { transform: translate(-4px, 3px); } 75% { transform: translate(2px, 2px); } }
+  .storm { position: absolute; inset: 0; background: rgba(255, 30, 90, .22); pointer-events: none; }
+  #zone { position: absolute; border: 2px solid var(--zone); box-shadow: 0 0 18px var(--zone), inset 0 0 18px rgba(34,240,255,.3);
+    background: #170b38; transition: all .6s ease; pointer-events: none;
+    background-image: linear-gradient(rgba(255,255,255,.05) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.05) 1px, transparent 1px); }
+  .player { position: absolute; width: calc(100% / 30); height: calc(100% / 30); transition: left .12s linear, top .12s linear;
+    display: flex; align-items: center; justify-content: center; }
+  .player .block { position: absolute; inset: 8%; border-radius: 4px; background: var(--c); box-shadow: 0 0 8px var(--c); }
+  .player.me .block { outline: 2px solid #fff; }
+  .player[data-connected="false"] .block { opacity: .35; filter: grayscale(1); }
+  .player.hit .block { animation: hit .3s; }
+  @keyframes hit { 0% { background: #fff; transform: scale(1.3); } 100% { transform: scale(1); } }
+  .player .label { position: absolute; bottom: 120%; white-space: nowrap; font-size: 10px; color: #fff; text-shadow: 0 0 3px #000; pointer-events: none; }
+  .healthbar { position: absolute; top: -6px; left: 0; width: 100%; height: 4px; background: #400; border-radius: 2px; overflow: hidden; }
+  .healthbar-fill { height: 100%; background: #3dff7a; }
+  .damage { position: absolute; font-weight: 800; font-size: 14px; pointer-events: none; text-shadow: 0 0 4px #000;
+    animation: float 1s ease-out forwards; transform: translate(-25%, -50%); }
+  .damage[data-kind="dealt"] { color: var(--dealt); }
+  .damage[data-kind="taken"] { color: var(--danger); }
+  @keyframes float { to { transform: translate(-25%, -250%); opacity: 0; } }
+  #banner { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; text-align: center;
+    font-size: 22px; font-weight: 800; pointer-events: none; text-shadow: 0 0 12px var(--accent); }
+  aside { flex: 1 1 240px; max-width: 320px; display: flex; flex-direction: column; gap: 10px; }
+  .panel { background: var(--panel); border-radius: 10px; padding: 10px 12px; }
+  .panel h2 { margin: 0 0 6px; font-size: 14px; color: var(--accent2); }
+  ol, ul { margin: 0; padding-left: 20px; font-size: 13px; }
+  #events li { color: var(--muted); }
+  #controls { display: grid; grid-template-columns: repeat(3, 60px); grid-template-rows: repeat(2, 52px); gap: 6px; }
+  #controls button { font-size: 20px; border: none; border-radius: 10px; background: #3a2580; color: #fff; touch-action: manipulation; }
+  #controls button:active { background: var(--accent); }
+  #attack-btn { width: 100%; height: 48px; border: none; border-radius: 10px; background: var(--accent); color: #fff; font-weight: 800; }
+  #rules-button { border: 1px solid var(--accent2); background: transparent; color: var(--accent2); border-radius: 8px; padding: 4px 10px; }
+  [hidden] { display: none !important; }
+</style>
+</head>
+<body>
+<header>
+  <h1>Grid Royale</h1>
+  <span class="stat">You: <b data-testid="me" id="me">…</b></span>
+  <span class="stat">Phase: <span data-testid="phase" id="phase">lobby</span> <b id="timer"></b></span>
+  <span class="stat">HP <b data-testid="hp" id="hp">100</b>/<b data-testid="hp-max" id="hp-max">100</b></span>
+  <span class="stat">Score <b data-testid="score" id="score">0</b></span>
+  <span class="stat">Strike <span class="cooldown" data-testid="cooldown" id="cooldown" data-ready="true" data-progress="1"><span class="cooldown-fill" id="cooldown-fill"></span></span></span>
+  <span class="stat" id="winner-wrap" hidden>Winner: <b data-testid="winner" id="winner"></b></span>
+</header>
+<main>
+  <div id="board-wrap">
+    <div id="grid" data-testid="grid" data-width="30" data-height="30">
+      <div class="storm"></div>
+      <div id="zone" data-testid="zone" data-x0="0" data-y0="0" data-x1="29" data-y1="29"></div>
+    </div>
+    <div id="banner"></div>
+  </div>
+  <aside>
+    <div id="controls">
+      <span></span><button data-testid="up" aria-label="up">▲</button><span></span>
+      <button data-testid="left" aria-label="left">◀</button>
+      <button data-testid="down" aria-label="down">▼</button>
+      <button data-testid="right" aria-label="right">▶</button>
+    </div>
+    <button data-testid="attack" id="attack-btn">ATTACK (Space)</button>
+    <div class="panel">
+      <h2>Highscores</h2>
+      <ol data-testid="highscores" id="highscores"></ol>
+    </div>
+    <div class="panel">
+      <h2>Feed</h2>
+      <ul id="events" data-testid="events"></ul>
+    </div>
+    <div class="panel">
+      <button id="rules-button" data-testid="rules-button">Rules</button>
+      <ul data-testid="rules" id="rules" hidden>
+        <li>Move with arrow keys or WASD, one cell per press, up to 5 moves a second.</li>
+        <li>Space attacks all 8 cells around you for 25 damage.</li>
+        <li>After attacking or moving you must wait 1 second before attacking again.</li>
+        <li>Everyone has 100 hit points. At 0 you are out and watch the rest of the round.</li>
+        <li>The safe zone shrinks one cell on each side every interval, down to 4 by 4. Outside it you lose 10 HP a second.</li>
+        <li>Points: 100 per kill, 10 each time the zone shrinks while you live, 250 for winning.</li>
+        <li>Last one standing wins. If you are alone, a bot joins to fight you.</li>
+        <li>Joining mid-round? You watch and play in the next round.</li>
+      </ul>
+    </div>
+  </aside>
+</main>
+<script src="/client.js"></script>
+</body>
+</html>

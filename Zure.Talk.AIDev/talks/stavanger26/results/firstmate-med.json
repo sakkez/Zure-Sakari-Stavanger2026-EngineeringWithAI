@@ -1,0 +1,45 @@
+{
+  "acceptance": {
+    "passed": 14,
+    "total": 21
+  },
+  "quality": {
+    "run": "runs/firstmate-med",
+    "files": 7,
+    "testFiles": 2,
+    "typeErrors": 0,
+    "lint": {
+      "errors": 21,
+      "warnings": 4
+    },
+    "complexity": {
+      "functions": 59,
+      "nloc": 378,
+      "avgCcn": 2.2,
+      "maxCcn": 19,
+      "over10": 3
+    },
+    "duplicationPct": 0,
+    "ownTests": {
+      "total": 9,
+      "passed": 9,
+      "coveragePct": 89.5
+    },
+    "ownE2e": {
+      "total": 3,
+      "passed": 3
+    },
+    "testsSkipped": 0,
+    "testFilesDeleted": 0,
+    "mutationScore": null,
+    "semgrepFindings": 0,
+    "auditHighCritical": 0,
+    "dependencies": 3
+  },
+  "cost": {
+    "usd": 1.77,
+    "tokens": 2048086,
+    "outputTokens": 28706
+  },
+  "minutes": 7
+}

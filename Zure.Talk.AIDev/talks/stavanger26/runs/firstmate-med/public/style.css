@@ -1,0 +1,43 @@
+:root { --bg: #0b0920; --panel: #17123a; --txt: #f1eefe; --accent: #ff2e88; --cyan: #22e3ff; --lime: #b6ff3b; }
+* { box-sizing: border-box; }
+body { margin: 0; background: radial-gradient(circle at 50% 0, #2a1263, var(--bg) 70%); color: var(--txt); font-family: system-ui, sans-serif; min-height: 100vh; }
+.hud { display: flex; flex-wrap: wrap; gap: 8px 16px; align-items: center; padding: 8px 16px; background: rgba(0,0,0,.35); position: sticky; top: 0; z-index: 10; }
+.title { font-weight: 900; letter-spacing: 2px; background: linear-gradient(90deg, var(--accent), var(--cyan)); -webkit-background-clip: text; color: transparent; }
+.hpbox b { color: var(--lime); }
+.cd-wrap { display: flex; align-items: center; gap: 6px; }
+.cooldown { width: 90px; height: 10px; background: #333; border-radius: 5px; overflow: hidden; }
+.cd-fill { height: 100%; width: 100%; background: var(--cyan); }
+.cooldown[data-ready="true"] .cd-fill { background: var(--lime); box-shadow: 0 0 8px var(--lime); }
+#banner { text-align: center; min-height: 1.6em; font-weight: 700; color: var(--cyan); padding: 4px 16px; }
+main { display: flex; flex-wrap: wrap; gap: 16px; padding: 0 16px 16px; justify-content: center; }
+.board-wrap { width: min(92vmin, 640px); max-width: 100%; }
+.grid { position: relative; width: 100%; aspect-ratio: 1; background:
+  linear-gradient(rgba(255,255,255,.05) 1px, transparent 1px) 0 0 / calc(100%/30) calc(100%/30),
+  linear-gradient(90deg, rgba(255,255,255,.05) 1px, transparent 1px) 0 0 / calc(100%/30) calc(100%/30),
+  #3a0b2e; border: 2px solid var(--accent); border-radius: 6px; overflow: hidden; }
+.zone { position: absolute; background: rgba(34, 227, 255, .12); border: 2px solid var(--cyan); box-shadow: 0 0 20px var(--cyan) inset; transition: all .6s ease; }
+.player { position: absolute; width: calc(100%/30); height: calc(100%/30); transition: left .12s ease, top .12s ease; z-index: 2; }
+.player .block { position: absolute; inset: 1px; border-radius: 4px; background: var(--accent); box-shadow: 0 0 8px var(--accent); }
+.player.me .block { background: var(--lime); box-shadow: 0 0 10px var(--lime); }
+.player[data-bot="true"] .block { background: #ff9f1c; box-shadow: 0 0 8px #ff9f1c; }
+.player[data-connected="false"] { opacity: .45; }
+.player[data-connected="false"]::after { content: "⚡"; position: absolute; top: -4px; right: -4px; font-size: 10px; }
+.player .label { position: absolute; bottom: 120%; left: 50%; transform: translateX(-50%); font-size: 9px; white-space: nowrap; pointer-events: none; }
+.healthbar { position: absolute; left: 0; right: 0; top: -4px; height: 3px; background: #400; }
+.healthbar-fill { height: 100%; background: var(--lime); transition: width .2s; }
+.player.hit .block { animation: hit .25s; }
+@keyframes hit { 0% { transform: scale(1.4); background: #fff; } 100% { transform: scale(1); } }
+.damage { position: absolute; font-weight: 900; font-size: 14px; pointer-events: none; z-index: 5; animation: float 1s ease-out forwards; text-shadow: 0 0 4px #000; }
+.damage[data-kind="dealt"] { color: #ffe600; }
+.damage[data-kind="taken"] { color: #ff3b3b; }
+@keyframes float { from { transform: translateY(0); opacity: 1; } to { transform: translateY(-24px); opacity: 0; } }
+aside { width: 260px; max-width: 100%; }
+.controls { display: grid; grid-template-columns: repeat(3, 64px); grid-template-rows: repeat(3, 56px); gap: 6px; justify-content: center; margin-bottom: 12px; }
+.controls button { font-size: 22px; border: none; border-radius: 10px; background: var(--panel); color: var(--txt); touch-action: manipulation; }
+.controls button:active { background: var(--accent); }
+.controls .up { grid-column: 2; grid-row: 1; } .controls .left { grid-column: 1; grid-row: 2; }
+.controls .attack { grid-column: 2; grid-row: 2; background: var(--accent); } .controls .right { grid-column: 3; grid-row: 2; }
+.controls .down { grid-column: 2; grid-row: 3; }
+#highscores { background: var(--panel); border-radius: 8px; padding: 8px 8px 8px 32px; min-height: 2em; }
+#rules-button { margin-top: 8px; background: var(--cyan); border: none; border-radius: 6px; padding: 6px 12px; font-weight: 700; }
+#rules { background: var(--panel); border-radius: 8px; padding: 8px 8px 8px 24px; font-size: 14px; }

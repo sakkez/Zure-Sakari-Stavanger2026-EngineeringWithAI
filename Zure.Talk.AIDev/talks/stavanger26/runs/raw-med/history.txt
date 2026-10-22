@@ -1,0 +1,46 @@
+
+92c73e5 2026-10-21 14:01:30 +0300 Ignore Playwright output
+
+ .gitignore                  | 2 ++
+ test-results/.last-run.json | 4 ----
+ 2 files changed, 2 insertions(+), 4 deletions(-)
+
+09200aa 2026-10-21 14:01:19 +0300 Playwright two-player tests and assumptions
+
+ ASSUMPTIONS.md              | 27 +++++++++++++
+ e2e/two-players.spec.ts     | 97 +++++++++++++++++++++++++++++++++++++++++++++
+ test-results/.last-run.json |  4 ++
+ 3 files changed, 128 insertions(+)
+
+ca01cc9 2026-10-21 14:00:28 +0300 Game logic, server, client and unit tests
+
+ .started-at          |    1 +
+ f0.tmp               |    1 +
+ f1.tmp               |    1 +
+ f2.tmp               |    1 +
+ idea.md              |   17 +
+ package-lock.json    | 2070 ++++++++++++++++++++++++++++++++++++++++++++++++++
+ package.json         |   31 +
+ playwright.config.ts |   22 +
+ public/client.js     |  278 +++++++
+ public/index.html    |   66 ++
+ public/style.css     |  115 +++
+ src/game.ts          |  410 ++++++++++
+ src/server.ts        |   85 +++
+ tests/game.test.ts   |  150 ++++
+ tsconfig.json        |   13 +
+ vitest.config.ts     |    3 +
+ 16 files changed, 3264 insertions(+)
+
+785d8fd 2026-10-21 12:28:12 +0300 install raw
+
+0ae6782 2026-10-21 12:28:12 +0300 base harness
+
+ .claude/settings.json | 20 ++++++++++++++++
+ .gitignore            |  8 +++++++
+ .run.env              |  4 ++++
+ AGENTS.md             | 64 +++++++++++++++++++++++++++++++++++++++++++++++++++
+ CLAUDE.md             |  1 +
+ PROMPT.md             |  7 ++++++
+ checks.sh             | 11 +++++++++
+ 7 files changed, 115 insertions(+)

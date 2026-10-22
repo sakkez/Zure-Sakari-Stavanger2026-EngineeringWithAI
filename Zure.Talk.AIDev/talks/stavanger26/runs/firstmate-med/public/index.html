@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+<title>Zone Royale</title>
+<link rel="stylesheet" href="/style.css">
+</head>
+<body>
+<header class="hud">
+  <div class="title">ZONE ROYALE</div>
+  <div class="stat">You: <b data-testid="me">…</b></div>
+  <div class="stat">Phase: <b data-testid="phase">lobby</b> <span id="timer"></span></div>
+  <div class="stat">Score: <b data-testid="score">0</b></div>
+  <div class="stat hpbox">HP: <b data-testid="hp">100</b>/<b data-testid="hp-max">100</b></div>
+  <div class="cd-wrap">Strike <div data-testid="cooldown" class="cooldown" data-ready="true" data-progress="1"><div class="cd-fill"></div></div></div>
+</header>
+<div id="banner"><span id="banner-text"></span> <b data-testid="winner" hidden></b></div>
+<main>
+  <div class="board-wrap">
+    <div data-testid="grid" id="grid" class="grid">
+      <div data-testid="zone" id="zone" class="zone" data-x0="0" data-y0="0" data-x1="29" data-y1="29"></div>
+    </div>
+  </div>
+  <aside>
+    <div class="controls">
+      <button data-testid="up" class="up">▲</button>
+      <button data-testid="left" class="left">◀</button>
+      <button data-testid="attack" class="attack">⚔</button>
+      <button data-testid="right" class="right">▶</button>
+      <button data-testid="down" class="down">▼</button>
+    </div>
+    <h3>Highscores</h3>
+    <ol data-testid="highscores" id="highscores"></ol>
+    <button data-testid="rules-button" id="rules-button">Rules</button>
+    <ul data-testid="rules" id="rules" hidden>
+      <li>Move with arrow keys or WASD (or the on-screen buttons); one cell per press.</li>
+      <li>Space (or ⚔) attacks: 25 damage to everyone in the 8 cells around you. Cooldown 1 second.</li>
+      <li>Everyone has 100 HP. At 0 HP you are out, but you can keep watching.</li>
+      <li>The safe zone shrinks one cell on every side at intervals, down to 4×4 in the middle.</li>
+      <li>Outside the zone you lose 10 HP every second.</li>
+      <li>Points: kill 100, win 250, +10 every time the zone shrinks while you are alive.</li>
+      <li>Last one standing wins. If the last players fall together, nobody wins.</li>
+      <li>Alone? A bot joins to fight you. Join mid-round and you wait for the next one.</li>
+      <li>Lost connection? Come back within a few seconds to keep your place.</li>
+    </ul>
+  </aside>
+</main>
+<script src="/client.js"></script>
+</body>
+</html>

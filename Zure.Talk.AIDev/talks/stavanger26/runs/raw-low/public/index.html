@@ -1,0 +1,62 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Zone Brawl</title>
+<style>
+:root{--bg:#0b0820;--panel:#1a1240;--txt:#f4f0ff;--acc:#ff2e88;--acc2:#21e6c1;--zone:#ffd23f}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at 30% 0,#2a1366,var(--bg));color:var(--txt);font-family:system-ui,sans-serif;min-height:100vh}
+header{display:flex;flex-wrap:wrap;gap:12px;align-items:center;padding:8px 16px;background:var(--panel);position:sticky;top:0;z-index:5}
+header b{color:var(--acc2)}
+main{display:flex;flex-wrap:wrap;gap:16px;padding:12px 16px;justify-content:center}
+#grid{position:relative;width:min(92vw,600px);aspect-ratio:1;background:#120c2e;border:2px solid #3b2a80;
+ background-image:linear-gradient(#ffffff0a 1px,transparent 1px),linear-gradient(90deg,#ffffff0a 1px,transparent 1px);background-size:calc(100%/30) calc(100%/30);overflow:hidden}
+.cell{position:absolute;width:calc(100%/30);height:calc(100%/30);transition:left .1s linear,top .1s linear}
+[data-testid=player]{border-radius:4px;background:var(--acc);box-shadow:0 0 8px var(--acc)}
+[data-testid=player].me{background:var(--acc2);box-shadow:0 0 10px var(--acc2)}
+[data-testid=player][data-bot=true]{background:#9b5cff}
+[data-testid=player] .nm{position:absolute;bottom:110%;left:50%;transform:translateX(-50%);font-size:9px;white-space:nowrap}
+[data-testid=healthbar]{position:absolute;top:-5px;left:0;width:100%;height:3px;background:#0008}
+[data-testid=healthbar-fill]{height:100%;background:#5f5}
+#zone{position:absolute;border:2px solid var(--zone);box-shadow:0 0 0 999px #ff2e2e22,0 0 12px var(--zone);transition:all .5s;pointer-events:none}
+[data-testid=damage]{position:absolute;font-weight:800;font-size:14px;pointer-events:none;animation:up 1s forwards}
+[data-kind=dealt]{color:#ffd23f}[data-kind=taken]{color:#ff3b3b}
+@keyframes up{to{transform:translateY(-24px);opacity:0}}
+#cd{width:100px;height:10px;background:#0006;border-radius:5px;overflow:hidden}#cdf{height:100%;background:var(--acc2)}
+#cd[data-ready=false] #cdf{background:#888}
+aside{background:var(--panel);padding:12px;border-radius:8px;min-width:220px}
+#pad{display:grid;grid-template-columns:repeat(3,56px);gap:6px;justify-content:center;margin-top:10px}
+#pad button{height:56px;font-size:20px;border:0;border-radius:10px;background:#3b2a80;color:#fff;touch-action:manipulation}
+#pad [data-testid=attack]{background:var(--acc)}
+#banner{font-size:22px;font-weight:800;color:var(--zone)}
+</style></head><body>
+<header>
+ <span>You: <b data-testid="me">…</b></span>
+ <span>Score <b data-testid="score">0</b></span>
+ <span>HP <b data-testid="hp">100</b>/<b data-testid="hp-max">100</b></span>
+ <div id="cd" data-testid="cooldown" data-ready="true" data-progress="1"><div id="cdf" style="width:100%"></div></div>
+ <span>Phase <b data-testid="phase">lobby</b></span>
+ <span id="winwrap" hidden>Winner <b data-testid="winner"></b></span>
+ <span id="banner"></span>
+</header>
+<main>
+ <div id="grid" data-testid="grid"><div id="zone" data-testid="zone"></div></div>
+ <aside>
+  <div id="pad">
+   <span></span><button data-testid="up">▲</button><span></span>
+   <button data-testid="left">◀</button><button data-testid="attack">⚔</button><button data-testid="right">▶</button>
+   <span></span><button data-testid="down">▼</button><span></span>
+  </div>
+  <h3>Highscores</h3><ol data-testid="highscores" id="hs"></ol>
+  <h3>Online</h3><ul id="online"></ul>
+  <button data-testid="rules-button" id="rb">Rules</button>
+  <ul data-testid="rules" id="rules" hidden>
+   <li>Move with arrows/WASD, attack with Space.</li>
+   <li>An attack deals 25 damage to everyone in the 8 cells around you. HP is 100.</li>
+   <li>You can attack again 1 second after attacking or moving.</li>
+   <li>The safe zone shrinks one cell per side every 15 seconds; outside it you lose 10 HP per second.</li>
+   <li>Kill: 100 points. Each zone shrink survived: 10 points. Win: 250 points.</li>
+   <li>Last one standing wins. Joining mid-round? You wait for the next one.</li>
+  </ul>
+ </aside>
+</main>
+<script src="client.js"></script>
+</body></html>

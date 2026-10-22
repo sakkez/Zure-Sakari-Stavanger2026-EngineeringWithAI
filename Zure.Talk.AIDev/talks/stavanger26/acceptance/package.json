@@ -1,0 +1,12 @@
+{
+  "name": "acceptance",
+  "private": true,
+  "description": "The hidden referee: plays a run's game through the browser contract in template/base/AGENTS.md.",
+  "type": "module",
+  "scripts": {
+    "test": "playwright test"
+  },
+  "devDependencies": {
+    "@playwright/test": "1.64.1"
+  }
+}

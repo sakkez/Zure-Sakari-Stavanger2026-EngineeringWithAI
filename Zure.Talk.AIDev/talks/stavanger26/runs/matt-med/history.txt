@@ -1,0 +1,158 @@
+
+66e00ea 2026-10-21 14:22:24 +0300 Spec for Grid Royale
+
+ .scratch/grid-royale/spec.md | 95 ++++++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 95 insertions(+)
+
+0dee5ec 2026-10-21 14:16:18 +0300 Playwright two-player e2e, assumptions and glossary
+
+ ASSUMPTIONS.md          | 13 +++++++++
+ GLOSSARY.md             | 12 ++++++++
+ e2e/two-players.spec.ts | 76 +++++++++++++++++++++++++++++++++++++++++++++++++
+ playwright.config.ts    | 16 +++++++++++
+ 4 files changed, 117 insertions(+)
+
+94fb920 2026-10-21 14:15:24 +0300 Game server, client and unit tests
+
+ .gitignore          |    3 +
+ .started-at         |    1 +
+ f0.tmp              |    1 +
+ f1.tmp              |    1 +
+ f2.tmp              |    1 +
+ idea.md             |   17 +
+ package-lock.json   | 2079 +++++++++++++++++++++++++++++++++++++++++++++++++++
+ package.json        |   24 +
+ public/index.html   |   64 ++
+ public/style.css    |   51 ++
+ src/client/main.ts  |  219 ++++++
+ src/server/game.ts  |  392 ++++++++++
+ src/server/index.ts |   77 ++
+ src/server/names.ts |   10 +
+ src/shared/types.ts |   68 ++
+ tests/game.test.ts  |  101 +++
+ tsconfig.json       |   14 +
+ vitest.config.ts    |    2 +
+ 18 files changed, 3125 insertions(+)
+
+4f49a08 2026-10-21 12:29:27 +0300 install mattpocock
+
+ .agent-steps                                       |   5 +
+ .claude/skills/ask-matt/PHASE-BOUNDARIES.md        |  55 +++++
+ .claude/skills/ask-matt/SKILL.md                   |  97 +++++++++
+ .claude/skills/ask-matt/agents/openai.yaml         |   5 +
+ .claude/skills/chief-of-staff/SKILL.md             |  45 +++++
+ .claude/skills/chief-of-staff/agents/openai.yaml   |   5 +
+ .claude/skills/claude-handoff/SKILL.md             |  18 ++
+ .claude/skills/claude-handoff/agents/openai.yaml   |   5 +
+ .claude/skills/code-review/SKILL.md                |  89 ++++++++
+ .claude/skills/code-review/agents/openai.yaml      |   3 +
+ .claude/skills/codebase-design/DEEPENING.md        |  37 ++++
+ .claude/skills/codebase-design/DESIGN-IT-TWICE.md  |  44 ++++
+ .claude/skills/codebase-design/SKILL.md            | 114 +++++++++++
+ .claude/skills/codebase-design/agents/openai.yaml  |   3 +
+ .claude/skills/diagnosing-bugs/SKILL.md            | 138 +++++++++++++
+ .claude/skills/diagnosing-bugs/agents/openai.yaml  |   3 +
+ .../diagnosing-bugs/scripts/hitl-loop.template.sh  |  44 ++++
+ .claude/skills/domain-modeling/ADR-FORMAT.md       |  47 +++++
+ .claude/skills/domain-modeling/GLOSSARY-FORMAT.md  |  60 ++++++
+ .claude/skills/domain-modeling/SKILL.md            |  74 +++++++
+ .claude/skills/domain-modeling/agents/openai.yaml  |   3 +
+ .claude/skills/git-guardrails-claude-code/SKILL.md |  95 +++++++++
+ .../git-guardrails-claude-code/agents/openai.yaml  |   3 +
+ .../scripts/block-dangerous-git.sh                 |  25 +++
+ .claude/skills/grill-me/SKILL.md                   |   7 +
+ .claude/skills/grill-me/agents/openai.yaml         |   5 +
+ .claude/skills/grill-with-docs/SKILL.md            |   7 +
+ .claude/skills/grill-with-docs/agents/openai.yaml  |   5 +
+ .claude/skills/grilling/SKILL.md                   |  30 +++
+ .claude/skills/grilling/agents/openai.yaml         |   3 +
+ .claude/skills/handoff/SKILL.md                    |  16 ++
+ .claude/skills/handoff/agents/openai.yaml          |   5 +
+ .claude/skills/implement-spec/SKILL.md             |  40 ++++
+ .claude/skills/implement-spec/agents/openai.yaml   |   5 +
+ .claude/skills/implement/SKILL.md                  |  17 ++
+ .claude/skills/implement/agents/openai.yaml        |   5 +
+ .../improve-codebase-architecture/HTML-REPORT.md   | 123 ++++++++++++
+ .../skills/improve-codebase-architecture/SKILL.md  |  71 +++++++
+ .../agents/openai.yaml                             |   5 +
+ .claude/skills/loop-me/SKILL.md                    |  32 +++
+ .claude/skills/loop-me/agents/openai.yaml          |   5 +
+ .claude/skills/migrate-to-shoehorn/SKILL.md        | 118 +++++++++++
+ .../skills/migrate-to-shoehorn/agents/openai.yaml  |   3 +
+ .claude/skills/pr/CREDITS.md                       |   3 +
+ .claude/skills/pr/SKILL.md                         | 170 ++++++++++++++++
+ .claude/skills/pr/agents/openai.yaml               |   3 +
+ .claude/skills/prototype/LOGIC.md                  |  67 +++++++
+ .claude/skills/prototype/SKILL.md                  |  26 +++
+ .claude/skills/prototype/UI.md                     | 112 +++++++++++
+ .claude/skills/prototype/agents/openai.yaml        |   3 +
+ .claude/skills/research/SKILL.md                   |  12 ++
+ .claude/skills/research/agents/openai.yaml         |   3 +
+ .claude/skills/retro/SKILL.md                      |  44 ++++
+ .claude/skills/retro/agents/openai.yaml            |   5 +
+ .claude/skills/scaffold-exercises/SKILL.md         | 106 ++++++++++
+ .../skills/scaffold-exercises/agents/openai.yaml   |   3 +
+ .claude/skills/setup-matt-pocock-skills/SKILL.md   | 118 +++++++++++
+ .../setup-matt-pocock-skills/agents/openai.yaml    |   5 +
+ .claude/skills/setup-matt-pocock-skills/domain.md  |  51 +++++
+ .../issue-tracker-github.md                        |  46 +++++
+ .../issue-tracker-gitlab.md                        |  46 +++++
+ .../issue-tracker-local.md                         |  30 +++
+ .../setup-matt-pocock-skills/triage-labels.md      |  15 ++
+ .claude/skills/setup-pre-commit/SKILL.md           |  91 +++++++++
+ .claude/skills/setup-pre-commit/agents/openai.yaml |   3 +
+ .claude/skills/setup-ts-deep-modules/SKILL.md      | 102 ++++++++++
+ .../setup-ts-deep-modules/agents/openai.yaml       |   5 +
+ .../dependency-cruiser.config.cjs                  |  95 +++++++++
+ .claude/skills/tdd/SKILL.md                        |  38 ++++
+ .claude/skills/tdd/agents/openai.yaml              |   3 +
+ .claude/skills/tdd/mocking.md                      |  59 ++++++
+ .claude/skills/tdd/tests.md                        |  77 +++++++
+ .claude/skills/teach/GLOSSARY-FORMAT.md            |  35 ++++
+ .claude/skills/teach/LEARNING-RECORD-FORMAT.md     |  46 +++++
+ .claude/skills/teach/MISSION-FORMAT.md             |  31 +++
+ .claude/skills/teach/RESOURCES-FORMAT.md           |  32 +++
+ .claude/skills/teach/SKILL.md                      | 140 +++++++++++++
+ .claude/skills/teach/agents/openai.yaml            |   5 +
+ .claude/skills/to-questionnaire/SKILL.md           |  54 +++++
+ .claude/skills/to-questionnaire/agents/openai.yaml |   5 +
+ .claude/skills/to-spec/SKILL.md                    |  75 +++++++
+ .claude/skills/to-spec/agents/openai.yaml          |   5 +
+ .claude/skills/to-tickets/SKILL.md                 | 105 ++++++++++
+ .claude/skills/to-tickets/agents/openai.yaml       |   5 +
+ .claude/skills/triage/AGENT-BRIEF.md               | 207 +++++++++++++++++++
+ .claude/skills/triage/OUT-OF-SCOPE.md              | 105 ++++++++++
+ .claude/skills/triage/SKILL.md                     | 112 +++++++++++
+ .claude/skills/triage/agents/openai.yaml           |   5 +
+ .claude/skills/wait-what/SKILL.md                  |   7 +
+ .claude/skills/wait-what/agents/openai.yaml        |   5 +
+ .claude/skills/wayfinder/SKILL.md                  | 128 ++++++++++++
+ .claude/skills/wayfinder/agents/openai.yaml        |   5 +
+ .claude/skills/wizard/SKILL.md                     |  44 ++++
+ .claude/skills/wizard/agents/openai.yaml           |   3 +
+ .claude/skills/wizard/template.sh                  | 223 +++++++++++++++++++++
+ .claude/skills/writing-beats/SKILL.md              |  67 +++++++
+ .claude/skills/writing-beats/agents/openai.yaml    |   5 +
+ .../skills/writing-for-agents/SKILL-MECHANICS.md   |  22 ++
+ .claude/skills/writing-for-agents/SKILL.md         |  81 ++++++++
+ .../skills/writing-for-agents/agents/openai.yaml   |   3 +
+ .claude/skills/writing-fragments/SKILL.md          |  79 ++++++++
+ .../skills/writing-fragments/agents/openai.yaml    |   5 +
+ .claude/skills/writing-shape/SKILL.md              |  79 ++++++++
+ .claude/skills/writing-shape/agents/openai.yaml    |   5 +
+ CLAUDE.md                                          |  14 ++
+ docs/agents/domain.md                              |  51 +++++
+ docs/agents/issue-tracker.md                       |  30 +++
+ docs/agents/triage-labels.md                       |  15 ++
+ 108 files changed, 4698 insertions(+)
+
+4f3c392 2026-10-21 12:29:20 +0300 base harness
+
+ .claude/settings.json | 20 ++++++++++++++++
+ .gitignore            |  8 +++++++
+ .run.env              |  4 ++++
+ AGENTS.md             | 64 +++++++++++++++++++++++++++++++++++++++++++++++++++
+ CLAUDE.md             |  1 +
+ PROMPT.md             |  7 ++++++
+ checks.sh             | 11 +++++++++
+ 7 files changed, 115 insertions(+)

@@ -1,0 +1,45 @@
+{
+  "acceptance": {
+    "passed": 7,
+    "total": 21
+  },
+  "quality": {
+    "run": "runs/raw-low",
+    "files": 7,
+    "testFiles": 2,
+    "typeErrors": 0,
+    "lint": {
+      "errors": 17,
+      "warnings": 3
+    },
+    "complexity": {
+      "functions": 50,
+      "nloc": 230,
+      "avgCcn": 2.1,
+      "maxCcn": 26,
+      "over10": 1
+    },
+    "duplicationPct": 0,
+    "ownTests": {
+      "total": 4,
+      "passed": 4,
+      "coveragePct": 75.86
+    },
+    "ownE2e": {
+      "total": 2,
+      "passed": 2
+    },
+    "testsSkipped": 0,
+    "testFilesDeleted": 0,
+    "mutationScore": null,
+    "semgrepFindings": 0,
+    "auditHighCritical": 0,
+    "dependencies": 3
+  },
+  "cost": {
+    "usd": 0.87,
+    "tokens": 977595,
+    "outputTokens": 18295
+  },
+  "minutes": 4
+}

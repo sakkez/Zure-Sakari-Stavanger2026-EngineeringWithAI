@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+<title>Grid Royale</title>
+<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+<header class="hud">
+  <div class="title">GRID<span>ROYALE</span></div>
+  <div class="stat">You <b data-testid="me">…</b></div>
+  <div class="stat">Score <b data-testid="score">0</b></div>
+  <div class="stat hpbox">HP <b data-testid="hp">100</b>/<b data-testid="hp-max">100</b>
+    <div class="hpbar"><div class="hpfill" id="my-hp-fill"></div></div>
+  </div>
+  <div class="stat">Strike
+    <div class="cooldown" data-testid="cooldown" data-ready="true" data-progress="1"><div class="cdfill"></div></div>
+  </div>
+  <div class="stat">Phase <b data-testid="phase">lobby</b> <span id="timer"></span></div>
+</header>
+<main>
+  <section class="arena-wrap">
+    <div class="grid" data-testid="grid" id="grid">
+      <div class="zone" data-testid="zone" id="zone" data-x0="0" data-y0="0" data-x1="29" data-y1="29"></div>
+    </div>
+    <div class="banner" id="banner"></div>
+    <div class="over" id="over" hidden>
+      <div>Winner</div>
+      <div class="winner" data-testid="winner">none</div>
+    </div>
+    <div class="toasts" id="toasts"></div>
+  </section>
+  <aside class="side">
+    <div class="panel">
+      <h2>Highscores</h2>
+      <ol data-testid="highscores" id="highscores"></ol>
+    </div>
+    <div class="panel">
+      <button data-testid="rules-button" id="rules-button" type="button">Rules</button>
+      <ul data-testid="rules" id="rules" hidden>
+        <li>Move with arrow keys / WASD or the on-screen arrows, one cell per press (max 5 per second).</li>
+        <li>Space or ⚔ attacks: 25 damage to everyone in the 8 cells around you.</li>
+        <li>After attacking or moving you wait 1 second before you can attack again.</li>
+        <li>Everyone has 100 hit points. Two players can't share a cell.</li>
+        <li>The safe zone shrinks by one cell on every side every interval, down to 4×4 in the middle.</li>
+        <li>Outside the zone you lose 10 HP every second.</li>
+        <li>Kill: +100. Each zone shrink you survive: +10. Win the round: +250.</li>
+        <li>Last one standing wins. Alone? A bot joins to fight you.</li>
+        <li>Dead or joined mid-round? Watch, and play in the next round.</li>
+      </ul>
+    </div>
+  </aside>
+</main>
+<nav class="pad">
+  <button data-testid="up" class="b-up" type="button">▲</button>
+  <button data-testid="left" class="b-left" type="button">◀</button>
+  <button data-testid="attack" class="b-attack" type="button">⚔</button>
+  <button data-testid="right" class="b-right" type="button">▶</button>
+  <button data-testid="down" class="b-down" type="button">▼</button>
+</nav>
+<script type="module" src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,38 @@
+
+f6ed491 2026-10-21 13:54:38 +0300 Ignore test results
+
+ .gitignore                  | 1 +
+ test-results/.last-run.json | 4 ----
+ 2 files changed, 1 insertion(+), 4 deletions(-)
+
+96f8c54 2026-10-21 13:54:35 +0300 Battle royale: server, client, unit and e2e tests
+
+ .started-at                 |    1 +
+ ASSUMPTIONS.md              |    8 +
+ e2e/two-players.spec.ts     |   74 ++
+ idea.md                     |   17 +
+ package-lock.json           | 2079 +++++++++++++++++++++++++++++++++++++++++++
+ package.json                |   26 +
+ playwright.config.ts        |    8 +
+ public/client.js            |   88 ++
+ public/index.html           |   62 ++
+ src/game.ts                 |  202 +++++
+ src/server.ts               |   41 +
+ test-results/.last-run.json |    4 +
+ test/game.test.ts           |   44 +
+ tsconfig.json               |    1 +
+ vitest.config.ts            |    1 +
+ 15 files changed, 2656 insertions(+)
+
+e27cb16 2026-10-21 12:28:05 +0300 install raw
+
+b9a25fb 2026-10-21 12:28:04 +0300 base harness
+
+ .claude/settings.json | 20 ++++++++++++++++
+ .gitignore            |  8 +++++++
+ .run.env              |  4 ++++
+ AGENTS.md             | 64 +++++++++++++++++++++++++++++++++++++++++++++++++++
+ CLAUDE.md             |  1 +
+ PROMPT.md             |  7 ++++++
+ checks.sh             | 11 +++++++++
+ 7 files changed, 115 insertions(+)
